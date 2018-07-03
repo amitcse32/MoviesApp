@@ -1,7 +1,6 @@
 package com.cssoft.moviedatabase.retrofit;
 
 import com.cssoft.moviedatabase.MainActivity;
-import com.cssoft.moviedatabase.MyInterface;
 import com.cssoft.moviedatabase.movies.Movies;
 
 import retrofit2.Call;
@@ -12,20 +11,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainRetrofit {
 
-    public void showMessage(final MyInterface myInterface)
+    public void getMovesFromServer(final MainActivity activity)
     {
-
-
-
-
-        Retrofit retrofit=new Retrofit.Builder().baseUrl("https://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
-        Call<Movies> dataRequest=retrofit.create(RetrofitInterface.class).getLatestMovies();
-        dataRequest.enqueue(new Callback<Movies>() {
+        Retrofit retrofit=new Retrofit.Builder().baseUrl("https://api.themoviedb.org/").addConverterFactory(GsonConverterFactory.create()).build();
+        Call<Movies> request=retrofit.create(RetrofitInterface.class).getUpComingMovies();
+        request.enqueue(new Callback<Movies>() {
             @Override
             public void onResponse(Call<Movies> call, Response<Movies> response) {
-                Movies movies=new Movies();
-                movies=response.body();
-                myInterface.loadMovies(movies);
+                Movies data=response.body();
+                activity.loadData(data);
             }
 
             @Override
@@ -33,11 +27,6 @@ public class MainRetrofit {
 
             }
         });
-
-
-
-
-
 
     }
 
